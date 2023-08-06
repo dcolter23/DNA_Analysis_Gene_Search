@@ -4,7 +4,6 @@ from Bio.Data import CodonTable
 from Bio import SeqIO, Entrez
 import streamlit as st
 from random import choice
-import pyperclip
 
 nucleotides = "ATCG"
 
