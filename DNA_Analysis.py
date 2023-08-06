@@ -5,7 +5,6 @@ from Bio import SeqIO, Entrez
 import streamlit as st
 from random import choice
 import pyperclip
-import time
 
 nucleotides = "ATCG"
 
@@ -38,14 +37,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("DNA Statistics")
+st.title("DNA Analysis")
 raw_sequence = st.text_area("Enter a DNA sequence with a length of at least 10 nucleotides.")
 formated_seq = raw_sequence.replace(" ", "").replace("\n", "").upper()
 isValid = False
 
 if raw_sequence != "":
     if validSequence(formated_seq) == False or len(formated_seq) < 10:
-        st.write("Not a valid sequence!")
+        st.warning("Not a valid sequence!")
         isValid = False
     else:
         isValid = True
