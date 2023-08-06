@@ -1,7 +1,7 @@
 from Bio.Seq import Seq
 from Bio.SeqUtils import gc_fraction
 from Bio.Data import CodonTable
-from Bio import SeqIO, File
+from Bio import SeqIO, Entrez
 import streamlit as st
 from pathlib import Path
 import os
@@ -76,3 +76,12 @@ if isValid:
             st.write("Created " + new_file + ".txt")
     if new_file == "" and st.session_state.clicked:
         st.write("No file name!")
+
+# handle = Entrez.efetch(db="nucleotide", id="L29345", rettype="gb", retmode="text")
+# record = SeqIO.read(handle, "genbank")
+# handle.close()
+# st.write(record.description)
+
+handle = Entrez.esearch(db="pubmed", term="GFP", retmax="40")
+record = Entrez.read(handle)
+st.text(record["IdList"])
