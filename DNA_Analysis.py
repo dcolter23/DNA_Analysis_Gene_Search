@@ -24,6 +24,7 @@ def randomSeq(nucleotides, length):
 
 def click_button():
         st.session_state.clicked = True
+
 def initializeButton():
     if 'clicked' not in st.session_state:
         st.session_state.clicked = False
@@ -112,8 +113,10 @@ else:
 
     rand_seq = randomSeq(nucleotides, length)
     st.write(rand_seq)
+    
+    st.divider()
+    st.subheader("Video Demo")
 
-# vid = open('video.mp4', 'rb')
-# vvi_bytes = vid.read()
-
-# st.video(vid)
+    vid = open('App_Demo_Final.mp4', 'rb')
+    vvi_bytes = vid.read()
+    st.video(vid)

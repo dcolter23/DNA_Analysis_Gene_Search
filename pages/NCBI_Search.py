@@ -1,6 +1,5 @@
 from Bio import Entrez, SeqIO
 from Bio.Seq import Seq, UndefinedSequenceError
-from Bio.Blast import NCBIWWW
 from datetime import date
 import streamlit as st
 import pyperclip
@@ -29,7 +28,7 @@ if term != "":
     with st.spinner("Searching..."):
         handle = Entrez.esearch(db="nucleotide", term = term, retmax = number, sort = "relevance")
         record = Entrez.read(handle)
-        
+
         if record["IdList"] != []:
             st.markdown(":red[**Sorted by relevance**]")
             st.write(', '.join(record["IdList"]))
