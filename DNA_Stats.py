@@ -3,6 +3,7 @@ from Bio.SeqUtils import gc_fraction
 from Bio.Data import CodonTable
 from Bio import SeqIO, Entrez
 import streamlit as st
+from random import choice
 
 nucleotides = "ATCG"
 
@@ -11,6 +12,12 @@ def validSequence(sequence):
         if nuc not in nucleotides:
             return False
     return True
+
+def randomSeq(nucleotides, length):
+    sequence = ""
+    for i in range(length):
+        sequence += choice(nucleotides)
+    return sequence
 
 def click_button():
         st.session_state.clicked = True
@@ -82,3 +89,8 @@ if isValid:
             f.close()
 
             st.write("Created " + new_file + ".txt")
+else:
+    st.divider()
+    st.subheader("Generate a random DNA sequence")
+    length = st.number_input("Length of desired sequence", step = 1, min_value = 0)
+    st.write(randomSeq(nucleotides, length))
