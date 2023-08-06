@@ -3,8 +3,6 @@ from Bio.SeqUtils import gc_fraction
 from Bio.Data import CodonTable
 from Bio import SeqIO, Entrez
 import streamlit as st
-from pathlib import Path
-import os
 
 nucleotides = "ATCG"
 
@@ -16,6 +14,15 @@ def validSequence(sequence):
 
 def click_button():
         st.session_state.clicked = True
+
+st.markdown("""
+<style>
+    [data-testid=stSidebar] {
+        background-color: #800000;
+    }
+
+</style>
+""", unsafe_allow_html=True)
 
 st.title("DNA Statistics")
 raw_sequence = st.text_area("Enter a DNA sequence with a length of at least 10 nucleotides.")
@@ -50,6 +57,7 @@ if isValid:
     st.text("Using the standard genetic code.")
     st.text(CodonTable.unambiguous_dna_by_id[1])
     
+    st.divider()
     st.header("Save DNA Statistics")
     new_file = st.text_input("File name")
 
@@ -74,14 +82,3 @@ if isValid:
             f.close()
 
             st.write("Created " + new_file + ".txt")
-    if new_file == "" and st.session_state.clicked:
-        st.write("No file name!")
-
-# handle = Entrez.efetch(db="nucleotide", id="L29345", rettype="gb", retmode="text")
-# record = SeqIO.read(handle, "genbank")
-# handle.close()
-# st.write(record.description)
-
-handle = Entrez.esearch(db="pubmed", term="GFP", retmax="40")
-record = Entrez.read(handle)
-st.text(record["IdList"])
