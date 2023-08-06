@@ -26,41 +26,45 @@ term = st.text_input("Enter a GenBank search query")
 number = st.number_input("Number of GenBank Identifiers to show", step = 1, min_value = 1, max_value = 100)
 
 if term != "":
-    handle = Entrez.esearch(db="nucleotide", term = term, retmax = number, sort = "relevance")
-    record = Entrez.read(handle)
-    if record["IdList"] != []:
-        st.markdown(":red[**Sorted by relevance**]")
-        st.write(', '.join(record["IdList"]))
-        st.text("Total GenBank Identifiers Found: " + str(record["Count"]))
+    with st.spinner("Searching..."):
+        handle = Entrez.esearch(db="nucleotide", term = term, retmax = number, sort = "relevance")
+        record = Entrez.read(handle)
         
-        if len(record["IdList"]) == 1:
-            handle = Entrez.efetch(db="nucleotide", id = record["IdList"][0], rettype="gb", retmode="text")
-            record = SeqIO.read(handle, "genbank")
-            handle.close()
-
-            st.divider()
-            st.write("**Record ID:**")
-            st.text(record.id)
-
-            st.divider()
-            st.write("**Record Description:**")
-            st.text(record.description)
-
-            if 'clicked' not in st.session_state:
-                st.session_state.clicked = False
+        if record["IdList"] != []:
+            st.markdown(":red[**Sorted by relevance**]")
+            st.write(', '.join(record["IdList"]))
+            st.text("Total GenBank Identifiers Found: " + str(record["Count"]))
             
-            st.divider()
-            try:
-                st.write("**Record Sequence:**")
-                st.button("Copy", on_click=click_button)
-                if st.session_state.clicked:
-                    pyperclip.copy(str(record.seq))
-                st.markdown(record.seq)
-            except UndefinedSequenceError:
-                st.markdown(":red[**NOT DEFINED**]")
+            if len(record["IdList"]) == 1:
+                handle = Entrez.efetch(db="nucleotide", id = record["IdList"][0], rettype="gb", retmode="text")
+                record = SeqIO.read(handle, "genbank")
+                handle.close()
 
-            st.divider()
-            st.write("**Full Record:**")
-            st.text(record)
-    else:
-        st.text("No match.")
+                st.divider()
+                st.write("**Record ID:**")
+                st.text(record.id)
+
+                st.divider()
+                st.write("**Record Description:**")
+                st.text(record.description)
+
+                if 'clicked' not in st.session_state:
+                    st.session_state.clicked = False
+                
+                st.divider()
+                try:
+                    st.write("**Record Sequence:**")
+                    st.button("Copy", on_click=click_button)
+                    
+                    if st.session_state.clicked:
+                        pyperclip.copy(str(record.seq))
+                    
+                    st.markdown(record.seq)
+                except UndefinedSequenceError:
+                    st.markdown(":red[**NOT DEFINED**]")
+
+                st.divider()
+                st.write("**Full Record:**")
+                st.text(record)
+        else:
+            st.text("No match.")

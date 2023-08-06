@@ -5,8 +5,11 @@ from Bio import SeqIO, Entrez
 import streamlit as st
 from random import choice
 import pyperclip
+import time
 
 nucleotides = "ATCG"
+
+st.set_page_config(page_title = "DNA Analysis and Gene Search Tool", layout = "wide")
 
 def validSequence(sequence):
     for nuc in sequence.upper():
@@ -22,6 +25,9 @@ def randomSeq(nucleotides, length):
 
 def click_button():
         st.session_state.clicked = True
+def initializeButton():
+    if 'clicked' not in st.session_state:
+        st.session_state.clicked = False
 
 st.markdown("""
 <style>
@@ -61,8 +67,11 @@ if isValid:
     st.write("Reverse Complement:", final_sequence.reverse_complement())
     st.write("Transcript:", final_sequence.transcribe())
 
+    st.divider()
+    st.info('Translation performed using the standard codon table from NCBI', icon="ℹ️")
+    
+    st.write("\n")
     st.write("Amino Acid Sequence: ", final_sequence.translate())
-    st.text("Using the standard genetic code.")
     st.text(CodonTable.unambiguous_dna_by_id[1])
     
     st.divider()
@@ -71,8 +80,7 @@ if isValid:
 
     st.button("Create file", on_click=click_button)
 
-    if 'clicked' not in st.session_state:
-        st.session_state.clicked = False
+    initializeButton()
     
     if new_file != "":
         if st.session_state.clicked:
@@ -89,7 +97,7 @@ if isValid:
             
             f.close()
 
-            st.write("Created " + new_file + ".txt")
+            st.success("Created " + new_file + ".txt")
 else:
     st.divider()
     st.subheader("Generate a random DNA sequence")
@@ -97,9 +105,16 @@ else:
 
     if length != 0:
         st.button("Randomize", on_click=click_button)
+    
+    initializeButton()
 
     if st.session_state.clicked:
         rand_seq = randomSeq(nucleotides, length)
 
     rand_seq = randomSeq(nucleotides, length)
     st.write(rand_seq)
+
+# vid = open('video.mp4', 'rb')
+# vvi_bytes = vid.read()
+
+# st.video(vid)
