@@ -4,6 +4,7 @@ from Bio.Data import CodonTable
 from Bio import SeqIO, Entrez
 import streamlit as st
 from random import choice
+import pyperclip
 
 nucleotides = "ATCG"
 
@@ -93,4 +94,12 @@ else:
     st.divider()
     st.subheader("Generate a random DNA sequence")
     length = st.number_input("Length of desired sequence", step = 1, min_value = 0)
-    st.write(randomSeq(nucleotides, length))
+
+    if length != 0:
+        st.button("Randomize", on_click=click_button)
+
+    if st.session_state.clicked:
+        rand_seq = randomSeq(nucleotides, length)
+
+    rand_seq = randomSeq(nucleotides, length)
+    st.write(rand_seq)
